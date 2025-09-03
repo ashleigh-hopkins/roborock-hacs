@@ -217,40 +217,6 @@ SENSOR_DESCRIPTIONS = [
         entity_category=EntityCategory.DIAGNOSTIC,
         is_dock_entity=True,
     ),
-    # Enhanced sensors for better monitoring
-    RoborockSensorDescription(
-        key="cleaning_mode",
-        translation_key="cleaning_mode",
-        value_fn=lambda data: getattr(data.status, 'cleaning_mode', 'unknown'),
-        entity_category=EntityCategory.DIAGNOSTIC,
-        device_class=SensorDeviceClass.ENUM,
-        options=["auto", "edge", "spot", "single_room", "zone", "unknown"],
-        icon="mdi:format-list-numbered",
-    ),
-    RoborockSensorDescription(
-        key="water_tank_level",
-        translation_key="water_tank_level",
-        value_fn=lambda data: getattr(data.status, 'water_percent', None),
-        entity_category=EntityCategory.DIAGNOSTIC,
-        native_unit_of_measurement=PERCENTAGE,
-        device_class=SensorDeviceClass.BATTERY,  # Battery class for percentage display
-        icon="mdi:water-percent",
-    ),
-    RoborockSensorDescription(
-        key="maintenance_needed",
-        translation_key="maintenance_needed",
-        value_fn=lambda data: sum([
-            1 for item in [
-                data.consumable.main_brush_time_left,
-                data.consumable.side_brush_time_left, 
-                data.consumable.filter_time_left,
-                data.consumable.sensor_time_left
-            ] if item and item < 86400  # Less than 1 day remaining
-        ]),
-        entity_category=EntityCategory.DIAGNOSTIC,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:wrench-clock",
-    ),
 ]
 
 
