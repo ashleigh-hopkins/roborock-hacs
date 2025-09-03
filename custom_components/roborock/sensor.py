@@ -251,13 +251,6 @@ SENSOR_DESCRIPTIONS = [
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:wrench-clock",
     ),
-    RoborockSensorDescription(
-        key="total_rooms_available",
-        translation_key="total_rooms_available",
-        value_fn=lambda data: 0,  # Will be overridden in RoborockRoomInfoSensor
-        entity_category=EntityCategory.DIAGNOSTIC,
-        icon="mdi:home-map-marker",
-    ),
 ]
 
 
