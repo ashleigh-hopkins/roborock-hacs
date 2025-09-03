@@ -354,6 +354,13 @@ class RoborockSensorEntity(RoborockCoordinatedEntityV1, SensorEntity):
         )
 
     @property
+    def name(self) -> str | None:
+        """Return the name of the sensor."""
+        # Force proper translation by explicitly returning None
+        # This allows HA to use translation_key instead of device class name
+        return None
+
+    @property
     def native_value(self) -> StateType | datetime.datetime:
         """Return the value reported by the sensor."""
         return self.entity_description.value_fn(
@@ -418,6 +425,13 @@ class RoborockSensorEntityA01(RoborockCoordinatedEntityA01, SensorEntity):
         """Initialize the entity."""
         self.entity_description = description
         super().__init__(f"{description.key}_{coordinator.duid_slug}", coordinator)
+
+    @property
+    def name(self) -> str | None:
+        """Return the name of the sensor."""
+        # Force proper translation by explicitly returning None
+        # This allows HA to use translation_key instead of device class name
+        return None
 
     @property
     def native_value(self) -> StateType:
