@@ -1,0 +1,9 @@
+{
+  "name": "Roborock",
+  "content_in_root": false,
+  "filename": "roborock.zip",
+  "country": [],
+  "homeassistant": "2024.1.0",
+  "render_readme": true,
+  "iot_class": "Local Polling"
+}
