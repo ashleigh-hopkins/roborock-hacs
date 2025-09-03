@@ -116,6 +116,7 @@ class RoborockVacuum(RoborockCoordinatedEntityV1, StateVacuumEntity):
     """General Representation of a Roborock vacuum."""
 
     _attr_icon = "mdi:robot-vacuum"
+    _attr_has_entity_name = True
     _attr_supported_features = (
         VacuumEntityFeature.PAUSE
         | VacuumEntityFeature.STOP

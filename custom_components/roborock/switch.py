@@ -144,6 +144,7 @@ class RoborockSwitch(RoborockEntityV1, SwitchEntity):
     """A class to let you turn functionality on Roborock devices on and off that does need a coordinator."""
 
     entity_description: RoborockSwitchDescription
+    _attr_has_entity_name = True
 
     def __init__(
         self,

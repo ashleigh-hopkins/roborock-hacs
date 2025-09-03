@@ -115,6 +115,7 @@ class RoborockSelectEntity(RoborockCoordinatedEntityV1, SelectEntity):
     """A class to let you set options on a Roborock vacuum where the potential options are fixed."""
 
     entity_description: RoborockSelectDescription
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -150,6 +151,7 @@ class RoborockCurrentMapSelectEntity(RoborockCoordinatedEntityV1, SelectEntity):
 
     _attr_entity_category = EntityCategory.CONFIG
     _attr_translation_key = "selected_map"
+    _attr_has_entity_name = True
 
     async def async_select_option(self, option: str) -> None:
         """Set the option."""
@@ -191,6 +193,7 @@ class RoborockRoomSelectEntity(RoborockCoordinatedEntityV1, SelectEntity):
     _attr_entity_category = EntityCategory.CONFIG
     _attr_translation_key = "room_selection"
     _attr_icon = "mdi:home-map-marker"
+    _attr_has_entity_name = True
 
     def __init__(
         self,

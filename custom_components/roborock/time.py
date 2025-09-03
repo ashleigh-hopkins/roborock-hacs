@@ -155,6 +155,7 @@ class RoborockTimeEntity(RoborockEntityV1, TimeEntity):
     """A class to let you set options on a Roborock vacuum where the potential options are fixed."""
 
     entity_description: RoborockTimeDescription
+    _attr_has_entity_name = True
 
     def __init__(
         self,

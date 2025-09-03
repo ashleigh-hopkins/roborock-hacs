@@ -100,6 +100,7 @@ class RoborockBinarySensorEntity(RoborockCoordinatedEntityV1, BinarySensorEntity
     """Representation of a Roborock binary sensor."""
 
     entity_description: RoborockBinarySensorDescription
+    _attr_has_entity_name = True
 
     def __init__(
         self,

@@ -105,6 +105,7 @@ class RoborockButtonEntity(RoborockEntityV1, ButtonEntity):
     """A class to define Roborock button entities."""
 
     entity_description: RoborockButtonDescription
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -128,6 +129,7 @@ class RoborockRoutineButtonEntity(RoborockEntity, ButtonEntity):
     """A class to define Roborock routines button entities."""
 
     entity_description: ButtonEntityDescription
+    _attr_has_entity_name = True
 
     def __init__(
         self,

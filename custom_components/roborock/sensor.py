@@ -337,6 +337,7 @@ class RoborockSensorEntity(RoborockCoordinatedEntityV1, SensorEntity):
     """Representation of a Roborock sensor."""
 
     entity_description: RoborockSensorDescription
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -366,6 +367,7 @@ class RoborockCurrentRoom(RoborockCoordinatedEntityV1, SensorEntity):
     _attr_device_class = SensorDeviceClass.ENUM
     _attr_translation_key = "current_room"
     _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -406,6 +408,7 @@ class RoborockSensorEntityA01(RoborockCoordinatedEntityA01, SensorEntity):
     """Representation of a A01 Roborock sensor."""
 
     entity_description: RoborockSensorDescriptionA01
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -428,6 +431,7 @@ class RoborockTotalRoomsSensor(RoborockCoordinatedEntityV1, SensorEntity):
     _attr_translation_key = "total_rooms_available"
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_icon = "mdi:home-map-marker"
+    _attr_has_entity_name = True
 
     def __init__(
         self,
