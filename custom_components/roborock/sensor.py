@@ -367,6 +367,11 @@ class RoborockSensorEntity(RoborockCoordinatedEntityV1, SensorEntity):
             self.coordinator.roborock_device_info.props
         )
 
+    @property
+    def name(self) -> str | None:
+        """Return the name of the sensor."""
+        return None
+
 
 class RoborockCurrentRoom(RoborockCoordinatedEntityV1, SensorEntity):
     """Representation of a Current Room Sensor."""
@@ -410,6 +415,11 @@ class RoborockCurrentRoom(RoborockCoordinatedEntityV1, SensorEntity):
             return self.coordinator.maps[self.coordinator.current_map].current_room
         return None
 
+    @property
+    def name(self) -> str | None:
+        """Return the name of the sensor."""
+        return None
+
 
 class RoborockSensorEntityA01(RoborockCoordinatedEntityA01, SensorEntity):
     """Representation of a A01 Roborock sensor."""
@@ -437,6 +447,11 @@ class RoborockSensorEntityA01(RoborockCoordinatedEntityA01, SensorEntity):
     def native_value(self) -> StateType:
         """Return the value reported by the sensor."""
         return self.coordinator.data[self.entity_description.data_protocol]
+
+    @property
+    def name(self) -> str | None:
+        """Return the name of the sensor."""
+        return None
 
 
 class RoborockTotalRoomsSensor(RoborockCoordinatedEntityV1, SensorEntity):
@@ -467,3 +482,8 @@ class RoborockTotalRoomsSensor(RoborockCoordinatedEntityV1, SensorEntity):
         ):
             return len(self.coordinator.maps[self.coordinator.current_map].rooms)
         return 0
+
+    @property
+    def name(self) -> str | None:
+        """Return the name of the sensor."""
+        return None
