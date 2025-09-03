@@ -26,3 +26,16 @@ get_vacuum_current_position:
     entity:
       integration: roborock
       domain: vacuum
+clean_rooms:
+  target:
+    entity:
+      integration: roborock
+      domain: vacuum
+  fields:
+    rooms:
+      example: ["Living Room", "Kitchen"]
+      required: true
+      selector:
+        select:
+          multiple: true
+          options: []

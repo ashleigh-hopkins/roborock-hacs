@@ -103,6 +103,12 @@ async def async_setup_entry(
         )
         for coordinator in config_entry.runtime_data.v1
     )
+    async_add_entities(
+        RoborockRoomSelectEntity(
+            f"room_selection_{coordinator.duid_slug}", coordinator
+        )
+        for coordinator in config_entry.runtime_data.v1
+    )
 
 
 class RoborockSelectEntity(RoborockCoordinatedEntityV1, SelectEntity):
@@ -177,3 +183,66 @@ class RoborockCurrentMapSelectEntity(RoborockCoordinatedEntityV1, SelectEntity):
         ):  # 63 means it is searching for a map.
             return self.coordinator.maps[current_map].name
         return None
+
+
+class RoborockRoomSelectEntity(RoborockCoordinatedEntityV1, SelectEntity):
+    """A class to let you select a room for targeted cleaning on Roborock vacuum."""
+
+    _attr_entity_category = EntityCategory.CONFIG
+    _attr_translation_key = "room_selection"
+    _attr_icon = "mdi:home-map-marker"
+
+    def __init__(
+        self,
+        unique_id: str,
+        coordinator: RoborockDataUpdateCoordinator,
+    ) -> None:
+        """Create a room selection entity."""
+        super().__init__(
+            unique_id,
+            coordinator,
+            None,
+        )
+        self._selected_room_id: int | None = None
+
+    async def async_select_option(self, option: str) -> None:
+        """Set the selected room (doesn't start cleaning yet)."""
+        if (
+            self.coordinator.current_map is not None
+            and self.coordinator.current_map in self.coordinator.maps
+        ):
+            # Find room ID by name 
+            room_map = self.coordinator.maps[self.coordinator.current_map].rooms
+            for room_id, room_name in room_map.items():
+                if room_name == option:
+                    self._selected_room_id = room_id
+                    break
+
+    @property
+    def options(self) -> list[str]:
+        """Get all available room names for the current map."""
+        if (
+            self.coordinator.current_map is not None
+            and self.coordinator.current_map in self.coordinator.maps
+        ):
+            return list(
+                self.coordinator.maps[self.coordinator.current_map].rooms.values()
+            )
+        return []
+
+    @property
+    def current_option(self) -> str | None:
+        """Get the currently selected room name."""
+        if (
+            self._selected_room_id is not None
+            and self.coordinator.current_map is not None
+            and self.coordinator.current_map in self.coordinator.maps
+        ):
+            room_map = self.coordinator.maps[self.coordinator.current_map].rooms
+            return room_map.get(self._selected_room_id)
+        return None
+
+    @property
+    def selected_room_id(self) -> int | None:
+        """Get the currently selected room ID for other entities to use."""
+        return self._selected_room_id

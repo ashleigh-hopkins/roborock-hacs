@@ -26,6 +26,7 @@ from .const import (
     GET_MAPS_SERVICE_NAME,
     GET_VACUUM_CURRENT_POSITION_SERVICE_NAME,
     SET_VACUUM_GOTO_POSITION_SERVICE_NAME,
+    CLEAN_ROOMS_SERVICE_NAME,
 )
 from .coordinator import RoborockConfigEntry, RoborockDataUpdateCoordinator
 from .entity import RoborockCoordinatedEntityV1
@@ -96,6 +97,17 @@ async def async_setup_entry(
             },
         ),
         RoborockVacuum.async_set_vacuum_goto_position.__name__,
+        supports_response=SupportsResponse.NONE,
+    )
+
+    platform.async_register_entity_service(
+        CLEAN_ROOMS_SERVICE_NAME,
+        cv.make_entity_service_schema(
+            {
+                vol.Required("rooms"): cv.ensure_list,
+            },
+        ),
+        RoborockVacuum.async_clean_rooms.__name__,
         supports_response=SupportsResponse.NONE,
     )
 
@@ -236,3 +248,37 @@ class RoborockVacuum(RoborockCoordinatedEntityV1, StateVacuumEntity):
             "x": robot_position.x,
             "y": robot_position.y,
         }
+
+    async def async_clean_rooms(self, rooms: list[str]) -> None:
+        """Clean specific rooms by name."""
+        if (
+            self.coordinator.current_map is None
+            or self.coordinator.current_map not in self.coordinator.maps
+        ):
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="no_map_available",
+            )
+
+        # Convert room names to room IDs
+        room_map = self.coordinator.maps[self.coordinator.current_map].rooms
+        room_ids = []
+        
+        for room_name in rooms:
+            room_id = None
+            for rid, rname in room_map.items():
+                if rname == room_name:
+                    room_id = rid
+                    break
+            
+            if room_id is None:
+                raise HomeAssistantError(
+                    translation_domain=DOMAIN,
+                    translation_key="room_not_found",
+                    translation_placeholders={"room_name": room_name},
+                )
+            
+            room_ids.append(room_id)
+
+        # Send the APP_SEGMENT_CLEAN command with room IDs
+        await self.send(RoborockCommand.APP_SEGMENT_CLEAN, room_ids)

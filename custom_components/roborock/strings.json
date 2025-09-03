@@ -350,6 +350,26 @@
           "under_delay_start": "Delayed start",
           "done": "Done"
         }
+      },
+      "cleaning_mode": {
+        "name": "Cleaning mode",
+        "state": {
+          "auto": "Auto",
+          "edge": "Edge cleaning",
+          "spot": "Spot cleaning", 
+          "single_room": "Single room",
+          "zone": "Zone cleaning",
+          "unknown": "Unknown"
+        }
+      },
+      "water_tank_level": {
+        "name": "Water tank level"
+      },
+      "maintenance_needed": {
+        "name": "Maintenance alerts"
+      },
+      "total_rooms_available": {
+        "name": "Total rooms"
       }
     },
     "select": {
@@ -382,6 +402,9 @@
       },
       "selected_map": {
         "name": "Selected map"
+      },
+      "room_selection": {
+        "name": "Room selection"
       },
       "dust_collection_mode": {
         "name": "Empty mode",
@@ -499,6 +522,24 @@
     "get_vacuum_current_position": {
       "name": "Get current position",
       "description": "Retrieves the current position of the vacuum."
+    },
+    "clean_rooms": {
+      "name": "Clean rooms",
+      "description": "Clean specific rooms by name.",
+      "fields": {
+        "rooms": {
+          "name": "Rooms",
+          "description": "List of room names to clean."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "no_map_available": {
+      "message": "No map available for room cleaning"
+    },
+    "room_not_found": {
+      "message": "Room '{room_name}' not found on current map"
     }
   }
 }

@@ -217,6 +217,47 @@ SENSOR_DESCRIPTIONS = [
         entity_category=EntityCategory.DIAGNOSTIC,
         is_dock_entity=True,
     ),
+    # Enhanced sensors for better monitoring
+    RoborockSensorDescription(
+        key="cleaning_mode",
+        translation_key="cleaning_mode",
+        value_fn=lambda data: getattr(data.status, 'cleaning_mode', 'unknown'),
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=SensorDeviceClass.ENUM,
+        options=["auto", "edge", "spot", "single_room", "zone", "unknown"],
+        icon="mdi:format-list-numbered",
+    ),
+    RoborockSensorDescription(
+        key="water_tank_level",
+        translation_key="water_tank_level",
+        value_fn=lambda data: getattr(data.status, 'water_percent', None),
+        entity_category=EntityCategory.DIAGNOSTIC,
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.BATTERY,  # Battery class for percentage display
+        icon="mdi:water-percent",
+    ),
+    RoborockSensorDescription(
+        key="maintenance_needed",
+        translation_key="maintenance_needed",
+        value_fn=lambda data: sum([
+            1 for item in [
+                data.consumable.main_brush_time_left,
+                data.consumable.side_brush_time_left, 
+                data.consumable.filter_time_left,
+                data.consumable.sensor_time_left
+            ] if item and item < 86400  # Less than 1 day remaining
+        ]),
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:wrench-clock",
+    ),
+    RoborockSensorDescription(
+        key="total_rooms_available",
+        translation_key="total_rooms_available",
+        value_fn=lambda data: 0,  # Will be overridden in RoborockRoomInfoSensor
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:home-map-marker",
+    ),
 ]
 
 
@@ -320,6 +361,7 @@ async def async_setup_entry(
         if description.value_fn(coordinator.roborock_device_info.props) is not None
     ]
     entities.extend(RoborockCurrentRoom(coordinator) for coordinator in coordinators.v1)
+    entities.extend(RoborockTotalRoomsSensor(coordinator) for coordinator in coordinators.v1)
     entities.extend(
         RoborockSensorEntityA01(
             coordinator,
@@ -419,3 +461,32 @@ class RoborockSensorEntityA01(RoborockCoordinatedEntityA01, SensorEntity):
     def native_value(self) -> StateType:
         """Return the value reported by the sensor."""
         return self.coordinator.data[self.entity_description.data_protocol]
+
+
+class RoborockTotalRoomsSensor(RoborockCoordinatedEntityV1, SensorEntity):
+    """Sensor showing total number of rooms available."""
+
+    _attr_translation_key = "total_rooms_available"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_icon = "mdi:home-map-marker"
+
+    def __init__(
+        self,
+        coordinator: RoborockDataUpdateCoordinator,
+    ) -> None:
+        """Initialize the total rooms sensor."""
+        super().__init__(
+            f"total_rooms_available_{coordinator.duid_slug}",
+            coordinator,
+            None,
+        )
+
+    @property
+    def native_value(self) -> int:
+        """Return the total number of rooms available."""
+        if (
+            self.coordinator.current_map is not None
+            and self.coordinator.current_map in self.coordinator.maps
+        ):
+            return len(self.coordinator.maps[self.coordinator.current_map].rooms)
+        return 0
