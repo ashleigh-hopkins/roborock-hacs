@@ -29,6 +29,7 @@ class RoborockEntity(Entity):
     """Representation of a base Roborock Entity."""
 
     _attr_has_entity_name = True
+    _attr_translation_domain = DOMAIN
 
     def __init__(
         self,

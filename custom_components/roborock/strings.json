@@ -313,6 +313,9 @@
       "washing_left": {
         "name": "Washing left"
       },
+      "total_rooms_available": {
+        "name": "Total rooms available"
+      },
       "zeo_error": {
         "name": "Error",
         "state": {
