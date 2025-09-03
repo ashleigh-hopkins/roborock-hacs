@@ -350,26 +350,6 @@
           "under_delay_start": "Delayed start",
           "done": "Done"
         }
-      },
-      "cleaning_mode": {
-        "name": "Cleaning mode",
-        "state": {
-          "auto": "Auto",
-          "edge": "Edge cleaning",
-          "spot": "Spot cleaning", 
-          "single_room": "Single room",
-          "zone": "Zone cleaning",
-          "unknown": "Unknown"
-        }
-      },
-      "water_tank_level": {
-        "name": "Water tank level"
-      },
-      "maintenance_needed": {
-        "name": "Maintenance alerts"
-      },
-      "total_rooms_available": {
-        "name": "Total rooms"
       }
     },
     "select": {
